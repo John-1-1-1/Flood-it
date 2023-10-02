@@ -42,27 +42,26 @@ def check_cells(pos):
     y = (pos[1] - SIZE_EDGE) // (SIZE_LINE + SIZE_CELL)
     new_color = map[x][y].color
     old_color = map[0][0].color
-
     if new_color == old_color:
-        return
-
+         return
     ch_cells = [map[0][0]]
     while len(ch_cells) != 0:
-        cell = ch_cells[0]
+        cell = ch_cells.pop(0)
         cell.color = new_color
-        ch_cells.pop(0)
-        c_x = cell.x
-        c_y = cell.y
+        check_neighbour(cell, ch_cells, new_color, old_color)
 
-        positions = [(c_x -1, c_y),
-                    (c_x +1, c_y),
-                    (c_x, c_y -1),
-                    (c_x, c_y +1)]
-        for pos in positions:
-            if  0 <= pos[0] < SIZE_FIELD and 0 <= pos[1] < SIZE_FIELD:
-                if map[pos[0]][pos[1]].color == old_color:
-                    ch_cells.append(map[pos[0]][pos[1]])
-                    map[pos[0]][pos[1]].color = new_color
+
+
+def check_neighbour(cell, ch_cells, new_color, old_color):
+    positions = [(cell.x - 1, cell.y),
+                 (cell.x + 1, cell.y),
+                 (cell.x, cell.y - 1),
+                 (cell.x, cell.y + 1)]
+    for pos in positions:
+        if 0 <= pos[0] < SIZE_FIELD and 0 <= pos[1] < SIZE_FIELD:
+            if map[pos[0]][pos[1]].color == old_color:
+                ch_cells.append(map[pos[0]][pos[1]])
+                map[pos[0]][pos[1]].color = new_color
 
 while 1:
     for i in pg.event.get():
